@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/usr/local/scripts:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin</string>
+	</dict>
+	<key>Label</key>
+	<string>com.tjluoma.fix-hostname</string>
+	<key>LowPriorityBackgroundIO</key>
+	<true/>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>Program</key>
+	<string>/usr/local/scripts/fix-hostname.sh</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/tmp/com.tjluoma.fix-hostname.log</string>
+	<key>StandardOutPath</key>
+	<string>/tmp/com.tjluoma.fix-hostname.log</string>
+	<key>StartInterval</key>
+	<integer>300</integer>
+</dict>
+</plist>
