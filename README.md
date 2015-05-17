@@ -1,8 +1,7 @@
 # fix-hostname
 
-Make sure that a Mac’s LocalHostName and ComputerName match
+OS X version 10.10 has a problem where the 'LocalHostName' ends up with a '-2' at the end of the name.
 
-Purpose: OS X 10.10 has a problem where the 'LocalHostName' ends up with a '-2' at the end of the name.
 To work around this, I set the 'ComputerName' to the same thing as what I want 'LocalHostName' to
 be, and then use this script to make sure they are identical.
 
@@ -12,9 +11,13 @@ For more info on these names, see: <http://ilostmynotes.blogspot.com/2012/03/com
 
 1.	Install `fix-hostname.sh` to somewhere such as `/usr/local/scripts/`
 
-2.	Install
+2.	Make sure `fix-hostname.sh` is excutable: `chmod 755 /usr/local/scripts/fix-hostname.sh`
 
-If you want this script to be able to run unattended (i.e. via `launchd`, then you need to use
+3.	Install `com.tjluoma.fix-hostname.plist` to `$HOME/Library/LaunchAgents/`
+
+4.	Tell `launchd` to load the new plist: `launchctl load $HOME/Library/LaunchAgents/com.tjluoma.fix-hostname.plist`
+
+5. If you want this script to be able to run unattended (i.e. via `launchd`, then you need to use
 'sudo visudo' to add one of these lines to your sudoers file:
 
 	%admin ALL=NOPASSWD: /usr/sbin/scutil
@@ -32,4 +35,16 @@ You can check to see what your ComputerName and LocalHostName values are using:
 and
 
 	scutil --get LocalHostName
+
+## Removal / Uninstallation
+
+1. 	Remove the file script: `rm /usr/local/scripts/fix-hostname.sh`
+
+2. 	Unload the plist from `launchd`: `launchctl unload $HOME/Library/LaunchAgents/com.tjluoma.fix-hostname.plist`
+
+3.	Remove the plist: `rm $HOME/Library/LaunchAgents/com.tjluoma.fix-hostname.plist`
+
+## Optional
+
+If `fix-hostname.sh` finds [po.sh](https://github.com/tjluoma/po.sh), it will use it to alert you via push notification when a change is made.
 
