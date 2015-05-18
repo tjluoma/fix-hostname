@@ -40,7 +40,7 @@ If you are the only user of your Mac, I recommend  first one.
 
 5.	Tell `launchd` to load the new plist: `launchctl load /Library/LaunchDaemons/com.tjluoma.fix-hostname.plist`
 
-## “Should I use Option 1 or Option 2”
+## “Should I use Option 1 or Option 2?”
 
 It’s a matter of personal preference.
 
