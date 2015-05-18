@@ -9,16 +9,10 @@
 #			To work around this, I set the 'ComputerName' to the same thing as what I want LocalHostName to
 #			be, and then use this script to make sure they are identical.
 #
-# If you want this script to be able to run unattended (i.e. via `launchd`), then you need to use
-# 'sudo visudo' to add one of these lines to your sudoers file:
+# For more info on these names, see:
+# http://ilostmynotes.blogspot.com/2012/03/computername-vs-localhostname-vs.html
 #
-# 	%admin ALL=NOPASSWD: /usr/sbin/scutil
-#
-# or
-#
-# 	%admin ALL=NOPASSWD: /usr/sbin/scutil --set LocalHostName
-#
-# If you are the only user of your Mac, I recommend  first one.
+############################################################################################################
 #
 # You can check to see what your ComputerName and LocalHostName values are using:
 #
@@ -28,8 +22,10 @@
 #
 # 	scutil --get LocalHostName
 #
-# For more info on these names, see:
-# http://ilostmynotes.blogspot.com/2012/03/computername-vs-localhostname-vs.html
+############################################################################################################
+#
+# If you want this script to be able to run unattended (i.e. via `launchd`),
+#
 #
 ############################################################################################################
 
@@ -50,10 +46,20 @@ zmodload zsh/datetime
 
 function msg {
 
-
 	function timestamp { strftime "%Y-%m-%d--%H.%M.%S" "$EPOCHSECONDS" }
 
 	echo "$NAME [`timestamp`]: $@" | tee -a "$HOME/Library/Logs/$NAME.log"
+
+	if (( $+commands[growlnotify] ))
+	then
+			# if Growl.app is running and `growlnotify` is installed…
+		pgrep -qx Growl && \
+		growlnotify \
+			--appIcon "Network Utility" \
+			--identifier "$NAME" \
+			--message "$@" \
+			--title "$NAME"
+	fi
 
 	if (( $+commands[po.sh] ))
 	then
@@ -69,7 +75,13 @@ then
 fi
 
 	# Try to set the LocalHostName to whatever the ComputerName is:
-sudo /usr/sbin/scutil --set LocalHostName "$COMPUTER_NAME"
+
+if [[ "$EUID" == "0" ]]
+then
+	/usr/sbin/scutil --set LocalHostName "$COMPUTER_NAME"
+else
+	sudo /usr/sbin/scutil --set LocalHostName "$COMPUTER_NAME"
+fi
 
 SET_LOCAL_HOST_NAME="$?"
 
